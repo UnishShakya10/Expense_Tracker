@@ -1,16 +1,23 @@
-# React + Vite
+# Expense Tracker Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Development
 
-Currently, two official plugins are available:
+Install dependencies and start the Vite development server:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm install
+npm run dev
+```
 
-## React Compiler
+The frontend uses `http://localhost:5000` as its API by default. To use a different
+backend locally, set `VITE_API_URL` in a `.env.local` file. See `.env.example`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Vercel deployment
 
-## Expanding the ESLint configuration
+The production build uses the URL in `.env.production`. If you configure
+`VITE_API_URL` in Vercel instead, set it to the public origin of the deployed
+backend (for example, `https://your-api.example.com`). Do not include
+`/api/expenses` in the value. Redeploy the frontend after changing the variable;
+Vite embeds it into the production build.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The backend must also allow requests from the deployed frontend origin.

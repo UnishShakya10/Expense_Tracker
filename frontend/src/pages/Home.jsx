@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 import {
   Clock,
@@ -42,8 +42,8 @@ const Home = () => {
   // =========================
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/expenses")
+    api
+      .get("/")
       .then((response) => {
         setExpenses(response.data);
       })
@@ -57,10 +57,7 @@ const Home = () => {
   // =========================
 
   const addExpense = async (newExpense) => {
-    const response = await axios.post(
-      "http://localhost:5000/api/expenses",
-      newExpense
-    );
+    const response = await api.post("/", newExpense);
 
     setExpenses((prev) => [
       response.data,
@@ -75,10 +72,7 @@ const Home = () => {
   // =========================
 
   const updateExpense = async (updatedExpense) => {
-    const response = await axios.put(
-      `http://localhost:5000/api/expenses/${editExpense._id}`,
-      updatedExpense
-    );
+    const response = await api.put(`/${editExpense._id}`, updatedExpense);
 
     setExpenses((prev) =>
       prev.map((expense) =>
@@ -98,9 +92,7 @@ const Home = () => {
 
   const deleteExpense = async (id) => {
     try {
-      await axios.delete(
-        `http://localhost:5000/api/expenses/${id}`
-      );
+      await api.delete(`/${id}`);
 
       setExpenses((prev) =>
         prev.filter((expense) => expense._id !== id)

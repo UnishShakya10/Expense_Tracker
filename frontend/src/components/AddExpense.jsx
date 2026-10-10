@@ -64,7 +64,9 @@ const AddExpense = ({
     } catch (error) {
       setSaveError(
         error.response?.data?.message ||
-          "Could not save the expense. Make sure the backend is running and try again."
+          (error.response
+            ? "Could not save the expense. Please try again."
+            : "Could not reach the backend. Check the VITE_API_URL setting and make sure the backend is running.")
       );
     } finally {
       setIsSaving(false);

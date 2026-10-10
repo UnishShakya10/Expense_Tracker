@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const AddExpense = ({
   onClose,
@@ -6,6 +6,8 @@ const AddExpense = ({
   onUpdate,
   editExpense,
 }) => {
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [expense, setExpense] = useState({
     title: editExpense?.title || "",
     amount: editExpense?.amount || "",
@@ -31,7 +33,7 @@ const AddExpense = ({
   // SUBMIT FORM
   // =========================
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Check empty fields
@@ -50,21 +52,29 @@ const AddExpense = ({
       amount: Number(expense.amount),
     };
 
-    // EDIT
-    if (editExpense) {
-      onUpdate(finalExpense);
-    }
+    setIsSaving(true);
+    setSaveError("");
 
-    // ADD
-    else {
-      onAdd(finalExpense);
+    try {
+      if (editExpense) {
+        await onUpdate(finalExpense);
+      } else {
+        await onAdd(finalExpense);
+      }
+    } catch (error) {
+      setSaveError(
+        error.response?.data?.message ||
+          "Could not save the expense. Make sure the backend is running and try again."
+      );
+    } finally {
+      setIsSaving(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
 
-      <div className="bg-white w-full max-w-md rounded-2xl p-8 shadow-2xl">
+      <div className="bg-white w-full max-w-md max-h-[calc(100vh-2rem)] overflow-y-auto rounded-2xl p-8 shadow-2xl">
 
         {/* =========================
             HEADER
@@ -210,14 +220,23 @@ const AddExpense = ({
 
             <button
               type="submit"
+              disabled={isSaving}
               className="flex-1 bg-[#08081c] text-white rounded-xl py-3 font-semibold hover:bg-black"
             >
-              {editExpense
-                ? "Update Expense"
-                : "Add Expense"}
+              {isSaving
+                ? "Saving..."
+                : editExpense
+                  ? "Update Expense"
+                  : "Add Expense"}
             </button>
 
           </div>
+
+          {saveError && (
+            <p role="alert" className="text-sm text-red-600">
+              {saveError}
+            </p>
+          )}
 
         </form>
 
@@ -228,4 +247,3 @@ const AddExpense = ({
 };
 
 export default AddExpense;
-

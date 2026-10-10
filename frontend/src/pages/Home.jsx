@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import {
@@ -57,21 +57,17 @@ const Home = () => {
   // =========================
 
   const addExpense = async (newExpense) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/expenses",
-        newExpense
-      );
+    const response = await axios.post(
+      "http://localhost:5000/api/expenses",
+      newExpense
+    );
 
-      setExpenses((prev) => [
-        response.data,
-        ...prev,
-      ]);
+    setExpenses((prev) => [
+      response.data,
+      ...prev,
+    ]);
 
-      setShowExpense(false);
-    } catch (error) {
-      console.log("Error adding expense:", error);
-    }
+    setShowExpense(false);
   };
 
   // =========================
@@ -79,25 +75,21 @@ const Home = () => {
   // =========================
 
   const updateExpense = async (updatedExpense) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/expenses/${editExpense._id}`,
-        updatedExpense
-      );
+    const response = await axios.put(
+      `http://localhost:5000/api/expenses/${editExpense._id}`,
+      updatedExpense
+    );
 
-      setExpenses((prev) =>
-        prev.map((expense) =>
-          expense._id === editExpense._id
-            ? response.data
-            : expense
-        )
-      );
+    setExpenses((prev) =>
+      prev.map((expense) =>
+        expense._id === editExpense._id
+          ? response.data
+          : expense
+      )
+    );
 
-      setEditExpense(null);
-      setShowExpense(false);
-    } catch (error) {
-      console.log("Error updating expense:", error);
-    }
+    setEditExpense(null);
+    setShowExpense(false);
   };
 
   // =========================
@@ -643,5 +635,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
